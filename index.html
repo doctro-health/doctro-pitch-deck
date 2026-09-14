@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+    
+    :root {
+      --brand: #2563eb;
+      --brand-dark: #1e3a8a;
+      --teal: #0d9488;
+      --emerald: #059669;
+      --crimson: #dc2626;
+      --bg-light: #f8fafc;
+      --bg-dark: #0b1120;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --shadow-premium: 0 20px 40px -15px rgba(0,0,0,0.05);
+      --shadow-glow-blue: 0 10px 30px -10px rgba(37, 99, 235, 0.4);
+      --shadow-glow-emerald: 0 10px 30px -10px rgba(5, 150, 105, 0.4);
+      --shadow-glow-red: 0 10px 30px -10px rgba(220, 38, 38, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg-light); color: var(--text-main); }
+    
+    .slide { 
+      min-height: 100vh; padding: 70px 80px; display: flex; flex-direction: column; 
+      justify-content: center; position: relative; overflow: hidden; page-break-after: always; 
+      background: #ffffff;
+    }
+    .slide-dark { background: var(--bg-dark); color: #ffffff; }
+    
+    @media (max-width: 768px) { .slide { padding: 40px 24px; } }
+    
+    h1, h2, h3, .font-outfit { font-family: 'Outfit', sans-serif; }
+    
+    .slide-number { position: absolute; bottom: 30px; right: 40px; font-size: 13px; color: #94a3b8; font-weight: 600; font-family: 'Outfit'; letter-spacing: 1px; }
+    
+    .brand-gradient-text { 
+      background: linear-gradient(135deg, #2563eb, #0d9488); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+    }
+    
+    .premium-card {
+      background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 24px; box-shadow: var(--shadow-premium);
+      padding: 32px; transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .premium-card:hover { transform: translateY(-5px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      padding: 32px;
+    }
+
+    .icon-box {
+      width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; 
+      justify-content: center; font-size: 24px; flex-shrink: 0; color: #ffffff;
+    }
+    .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: var(--shadow-glow-blue); }
+    .icon-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 10px 30px -10px rgba(13, 148, 136, 0.4); }
+    .icon-emerald { background: linear-gradient(135deg, #10b981, #059669); box-shadow: var(--shadow-glow-emerald); }
+    .icon-red { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: var(--shadow-glow-red); }
+    .icon-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.4); }
+    .icon-orange { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 10px 30px -10px rgba(234, 88, 12, 0.4); }
+    .icon-slate { background: linear-gradient(135deg, #64748b, #475569); box-shadow: 0 10px 30px -10px rgba(71, 85, 105, 0.4); }
+
+    .badge-pill {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; 
+      border-radius: 100px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    }
+    
+    .badge-live { background: #2563eb; color: #ffffff; font-size: 10px; padding: 4px 12px; border-radius: 100px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-soon { background: #f1f5f9; color: #64748b; font-size: 10px; padding: 4px 12px; border-radius: 100px; font-weight: 800; border: 1px solid #e2e8f0; letter-spacing: 0.5px; }
+
+    /* Flowchart Line connecting steps */
+    .flow-connector {
+      position: absolute; top: 50%; left: 0; width: 100%; height: 4px; 
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981, #ef4444);
+      z-index: 0; transform: translateY(-50%); opacity: 0.3; border-radius: 2px;
+    }
+
+    /* Financial Chart Grid */
+    .chart-container {
+      position: relative; height: 250px; display: flex; align-items: flex-end; justify-content: space-around;
+      padding-bottom: 30px; border-bottom: 2px solid #e2e8f0; border-left: 2px solid #e2e8f0; margin-left: 40px; margin-top: 40px;
+    }
+    .grid-line {
+      position: absolute; left: 0; right: 0; border-bottom: 1px dashed #cbd5e1; z-index: 0;
+    }
+    .y-axis-label {
+      position: absolute; left: -40px; font-size: 12px; font-weight: 600; color: #94a3b8; transform: translateY(50%);
+    }
+    .chart-bar {
+      width: 60px; border-radius: 8px 8px 0 0; position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 10px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    }
+    .chart-bar span.val { color: #fff; font-family: 'Outfit'; font-weight: 800; font-size: 16px; }
+    .chart-bar span.lbl { position: absolute; bottom: -30px; font-size: 13px; font-weight: 600; color: #475569; }
+
+    .competitive-grid {
+      display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 1px; background: #e2e8f0;
+      border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;
+    }
+    .comp-cell { background: #ffffff; padding: 16px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .comp-header { background: #f8fafc; font-weight: 700; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .comp-doctro { background: #eff6ff; font-weight: 800; color: #1e3a8a; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════ SLIDE 1: COVER ════════════ -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0b1120 70%); align-items: center; text-align: center;">
+    <div style="position: absolute; inset: 0; background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4='); opacity: 0.5;"></div>
+    
+    <div style="position: relative; z-index: 1;">
+      <div class="badge-pill" style="background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4); color: #60a5fa; margin-bottom: 40px;">
+        <i class="fa-solid fa-lock" style="font-size: 11px;"></i> CONFIDENTIAL INVESTOR DECK
+      </div>
+      
+      <h1 style="font-size: 84px; font-weight: 900; color: #ffffff; line-height: 1; margin-bottom: 24px; letter-spacing: -2px; text-shadow: 0 10px 30px rgba(37,99,235,0.5);">
+        DOCTRO
+      </h1>
+      
+      <p style="font-size: 26px; color: #94a3b8; font-weight: 400; margin-bottom: 48px; letter-spacing: -0.5px;">
+        The Operating System for <span style="color: #ffffff; font-weight: 600;">Modern Healthcare</span>
+      </p>
+      
+      <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #2563eb, #0d9488); margin: 0 auto 48px; border-radius: 2px; box-shadow: 0 0 20px rgba(37,99,235,0.6);"></div>
+      
+      <div style="display: flex; gap: 40px; justify-content: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 24px 48px; border-radius: 24px; backdrop-filter: blur(10px);">
+        <div style="text-align: center;">
+          <div style="font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Stage</div>
+          <div style="font-size: 20px; color: #ffffff; font-weight: 800; margin-top: 6px; font-family: 'Outfit';">Seed Round</div>
+        </div>
+        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+        <div style="text-align: center;">
+          <div style="font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Raising</div>
+          <div style="font-size: 20px; color: #34d399; font-weight: 800; margin-top: 6px; font-family: 'Outfit';">₹5 Crore</div>
+        </div>
+        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+        <div style="text-align: center;">
+          <div style="font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Recognition</div>
+          <div style="font-size: 20px; color: #60a5fa; font-weight: 800; margin-top: 6px; font-family: 'Outfit';">DPIIT Certified</div>
+        </div>
+      </div>
+      
+      <p style="color: #475569; font-size: 14px; margin-top: 60px; font-weight: 500;">Doctro Health Private Limited · Kolkata, India</p>
+    </div>
+  </div>
+
+  <!-- ════════════ SLIDE 2: THE PROBLEM ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #fef2f2; color: #dc2626; margin-bottom: 24px;">
+      <i class="fa-solid fa-triangle-exclamation"></i> THE PROBLEM
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; color: #0f172a; letter-spacing: -1px;">
+      India's Healthcare Is<br><span style="color: #dc2626;">Broken at Every Level</span>
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 700px; margin-bottom: 50px; line-height: 1.6;">
+      The gap between patients and quality healthcare is widening. Fragmentation, delays, and lack of transparency are costing millions of lives every year.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+      <div class="premium-card" style="text-align: center; border-top: 4px solid #ea580c;">
+        <div class="icon-box icon-orange" style="margin: 0 auto 24px; width: 64px; height: 64px; font-size: 28px;"><i class="fa-solid fa-hospital-user"></i></div>
+        <div class="font-outfit" style="font-size: 64px; font-weight: 900; color: #ea580c; line-height: 1;">67%</div>
+        <div style="font-size: 16px; color: #0f172a; font-weight: 700; margin-top: 16px;">Delayed Access to Care</div>
+        <p style="font-size: 14px; color: #64748b; margin-top: 8px;">Patients delay care due to difficulty finding the right hospital or doctor.</p>
+        <div style="font-size: 12px; color: #94a3b8; margin-top: 16px; font-weight: 600;">— NITI Aayog Report</div>
+      </div>
+      
+      <div class="premium-card" style="text-align: center; border-top: 4px solid #dc2626;">
+        <div class="icon-box icon-red" style="margin: 0 auto 24px; width: 64px; height: 64px; font-size: 28px;"><i class="fa-solid fa-truck-medical"></i></div>
+        <div class="font-outfit" style="font-size: 64px; font-weight: 900; color: #dc2626; line-height: 1;">40<span style="font-size: 40px">+</span><span style="font-size: 20px; color: #94a3b8;">MIN</span></div>
+        <div style="font-size: 16px; color: #0f172a; font-weight: 700; margin-top: 16px;">Ambulance Response</div>
+        <p style="font-size: 14px; color: #64748b; margin-top: 8px;">Average wait time in cities, operating entirely on manual un-tracked dispatch.</p>
+        <div style="font-size: 12px; color: #94a3b8; margin-top: 16px; font-weight: 600;">— National Ambulance Study</div>
+      </div>
+      
+      <div class="premium-card" style="text-align: center; border-top: 4px solid #7c3aed;">
+        <div class="icon-box icon-purple" style="margin: 0 auto 24px; width: 64px; height: 64px; font-size: 28px;"><i class="fa-solid fa-calendar-xmark"></i></div>
+        <div class="font-outfit" style="font-size: 64px; font-weight: 900; color: #7c3aed; line-height: 1;">1 <span style="font-size: 32px; color: #94a3b8;">in</span> 3</div>
+        <div style="font-size: 16px; color: #0f172a; font-weight: 700; margin-top: 16px;">Missed Follow-ups</div>
+        <p style="font-size: 14px; color: #64748b; margin-top: 8px;">Patients fall through the cracks due to fragmented and disjointed systems.</p>
+        <div style="font-size: 12px; color: #94a3b8; margin-top: 16px; font-weight: 600;">— WHO India Report</div>
+      </div>
+    </div>
+    <div class="slide-number">01</div>
+  </div>
+
+  
+  <!-- ════════════ SLIDE 3: MARKET SIZE ════════════ -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0b1120 100%);">
+    <div class="badge-pill" style="background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.4); color: #a5b4fc; margin-bottom: 24px;">
+      <i class="fa-solid fa-chart-pie"></i> MARKET SIZE & POTENTIAL
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; color: #ffffff; letter-spacing: -1px;">
+      A <span style="color: #818cf8;">$372 Billion</span> Blue Ocean
+    </h2>
+    <p style="color: #94a3b8; font-size: 18px; max-width: 800px; margin-bottom: 50px; line-height: 1.6;">
+      The Indian healthcare market is highly fragmented. Doctro is building the unifying layer to capture the digital health and emergency response sectors.
+    </p>
+    
+    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 20px; height: 350px; position: relative;">
+      <!-- TAM -->
+      <div style="background: rgba(99,102,241,0.05); border: 2px dashed rgba(99,102,241,0.3); border-radius: 50%; height: 350px; width: 350px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; position: absolute; z-index: 1; padding-top: 30px;">
+        <div style="font-size: 14px; font-weight: 800; color: #818cf8; letter-spacing: 2px;">TAM</div>
+        <div style="font-size: 36px; font-weight: 900; color: #ffffff;">$372B</div>
+        <div style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 4px;">Total Indian Healthcare Market</div>
+      </div>
+      <!-- SAM -->
+      <div style="background: rgba(99,102,241,0.15); border: 2px solid rgba(99,102,241,0.5); border-radius: 50%; height: 240px; width: 240px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; position: absolute; z-index: 2; margin-bottom: 0; padding-top: 20px;">
+        <div style="font-size: 14px; font-weight: 800; color: #a5b4fc; letter-spacing: 2px;">SAM</div>
+        <div style="font-size: 32px; font-weight: 900; color: #ffffff;">$45B</div>
+        <div style="font-size: 12px; color: #cbd5e1; text-align: center; margin-top: 4px;">Digital Health & Emergency</div>
+      </div>
+      <!-- SOM -->
+      <div style="background: linear-gradient(135deg, #6366f1, #3b82f6); box-shadow: 0 10px 30px rgba(99,102,241,0.5); border-radius: 50%; height: 140px; width: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: absolute; z-index: 3; margin-bottom: 0;">
+        <div style="font-size: 14px; font-weight: 800; color: #ffffff; letter-spacing: 2px;">SOM</div>
+        <div style="font-size: 28px; font-weight: 900; color: #ffffff;">$2.5B</div>
+        <div style="font-size: 11px; color: #e0e7ff; text-align: center; margin-top: 4px;">Doctro 5-Yr Target</div>
+      </div>
+    </div>
+    <div class="slide-number">02</div>
+  </div>
+
+  <!-- ════════════ SLIDE 4: THE ECOSYSTEM ════════════ -->
+  <div class="slide" style="background: #f8fafc;">
+    <div class="badge-pill" style="background: #eff6ff; color: #2563eb; margin-bottom: 24px;">
+      <i class="fa-solid fa-layer-group"></i> OUR SOLUTION
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      One Platform.<br><span class="brand-gradient-text">Entire Healthcare Journey.</span>
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 800px; margin-bottom: 40px; line-height: 1.6;">
+      Doctro is a full-stack healthcare operating system bridging patients, hospitals, and emergency responders into one seamless, AI-powered digital ecosystem.
+    </p>
+
+    <div class="premium-card" style="padding: 40px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 32px;">
+      <!-- Top Tier: AI Core -->
+      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <div style="background: linear-gradient(135deg, #0f172a, #1e293b); padding: 16px 40px; border-radius: 100px; display: inline-flex; align-items: center; gap: 16px; box-shadow: 0 10px 25px rgba(15,23,42,0.3); border: 1px solid rgba(255,255,255,0.1);">
+          <div class="icon-box" style="width: 32px; height: 32px; background: #2563eb; font-size: 16px; border-radius: 8px;"><i class="fa-solid fa-brain"></i></div>
+          <span style="color: #ffffff; font-family: 'Outfit'; font-weight: 800; font-size: 20px; letter-spacing: 1px;">DOCTRO AI ENGINE & PLATFORM CORE</span>
+        </div>
+      </div>
+
+      <!-- Connector Line -->
+      <div style="width: 2px; height: 30px; background: #cbd5e1; margin: 0 auto 30px;"></div>
+
+      <!-- Ecosystem Grid: 12 Core Pillars -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+        
+        <!-- Live Services -->
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-blue" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-user-doctor"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #0f172a; margin-bottom: 4px;">Doctor Consultation</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Video & physical clinic visits.</div>
+          </div>
+        </div>
+        
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-red" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-truck-fast"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #0f172a; margin-bottom: 4px;">5-Min Ambulance</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">GPS-tracked emergency dispatch.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-teal" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-bed-pulse"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #0f172a; margin-bottom: 4px;">Live Bed Booking</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Instant hospital admission.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-purple" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-microscope"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #0f172a; margin-bottom: 4px;">Lab Tests & Diagnostics</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Pathology, ECG, USG from home.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-emerald" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-shield-heart"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #0f172a; margin-bottom: 4px;">Health Check-ups</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Full body preventive screening.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-orange" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-robot"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #0f172a; margin-bottom: 4px;">AI Health Assistant</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Voice/Chat triage & alerts.</div>
+          </div>
+        </div>
+
+        <!-- Expansion Pipeline Integrated -->
+        <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-slate" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-pills"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #334155; margin-bottom: 4px;">Pharmacy Delivery</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Doorstep prescription meds.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-slate" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-house-medical"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #334155; margin-bottom: 4px;">Home Care</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Trained nurses & attendants.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-slate" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-file-medical"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #334155; margin-bottom: 4px;">Insurance Desk</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Cashless claims & pre-auth.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-slate" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-person-walking"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #334155; margin-bottom: 4px;">Rehab Centre</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Post-op physiotherapy.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-slate" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-plane-departure"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #334155; margin-bottom: 4px;">Med Tourism</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Healthcare travel concierge.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; transition: transform 0.2s;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+             <div class="icon-box icon-slate" style="width: 40px; height: 40px; border-radius: 10px; font-size: 16px;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+             
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: #334155; margin-bottom: 4px;">Health Loan</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Instant medical financing.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="slide-number">03</div>
+  </div>
+
+  <!-- ════════════ SLIDE 5: SMART HOSPITAL SEARCH ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #eff6ff; color: #2563eb; margin-bottom: 24px;">
+      <i class="fa-solid fa-magnifying-glass-chart"></i> GAME CHANGING FEATURE
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      Smart Hospital Search &<br><span class="brand-gradient-text">Live Bed Booking</span>
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 800px; margin-bottom: 50px; line-height: 1.6;">
+      No more running hospital to hospital begging for beds. Patients search by medical condition, and Doctro instantly ranks hospitals by proximity, live bed count, and mortality rates.
+    </p>
+
+    <!-- Professional Flowchart -->
+    <div style="position: relative; margin-bottom: 60px; padding: 20px 0;">
+      <div class="flow-connector"></div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; position: relative; z-index: 1;">
+        
+        <div class="premium-card" style="text-align: center; padding: 24px 16px;">
+          <div class="icon-box icon-blue" style="margin: 0 auto 16px; width: 48px; height: 48px; font-size: 20px;"><i class="fa-solid fa-keyboard"></i></div>
+          <div style="font-weight: 800; font-size: 15px; color: #0f172a;">1. Patient Searches</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">"Heart Attack" / "Cancer"</div>
+        </div>
+        
+        <div class="premium-card" style="text-align: center; padding: 24px 16px;">
+          <div class="icon-box icon-purple" style="margin: 0 auto 16px; width: 48px; height: 48px; font-size: 20px;"><i class="fa-solid fa-microchip"></i></div>
+          <div style="font-weight: 800; font-size: 15px; color: #0f172a;">2. AI Categorizes</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">Maps to precise medical Dept.</div>
+        </div>
+
+        <div class="premium-card" style="text-align: center; padding: 24px 16px;">
+          <div class="icon-box icon-emerald" style="margin: 0 auto 16px; width: 48px; height: 48px; font-size: 20px;"><i class="fa-solid fa-chart-simple"></i></div>
+          <div style="font-weight: 800; font-size: 15px; color: #0f172a;">3. Ranked Results</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">Live beds, distance, ratings.</div>
+        </div>
+
+        <div class="premium-card" style="text-align: center; padding: 24px 16px;">
+          <div class="icon-box icon-red" style="margin: 0 auto 16px; width: 48px; height: 48px; font-size: 20px;"><i class="fa-solid fa-check-double"></i></div>
+          <div style="font-weight: 800; font-size: 15px; color: #0f172a;">4. Instant Admission</div>
+          <div style="font-size: 13px; color: #64748b; margin-top: 8px;">Book bed + Dispatch Ambulance</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sample Hospital Results UI -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      <!-- Hospital 1 -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div style="font-weight: 800; font-size: 18px; color: #0f172a;">Apollo Hospital</div>
+          <div style="background: #ecfdf5; color: #059669; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800;"><i class="fa-solid fa-certificate"></i> JCI</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px;">
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #2563eb;">12</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Live Beds</div>
+          </div>
+          <div style="width: 1px; background: #e2e8f0;"></div>
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #059669;">2.1%</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Mortality</div>
+          </div>
+          <div style="width: 1px; background: #e2e8f0;"></div>
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #d97706;">3.2 <span style="font-size: 14px;">km</span></div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Distance</div>
+          </div>
+        </div>
+        <button style="width: 100%; background: #2563eb; color: #fff; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; border: none; cursor: pointer; box-shadow: var(--shadow-glow-blue);">
+          Book Admission <i class="fa-solid fa-arrow-right ml-2"></i>
+        </button>
+      </div>
+
+      <!-- Hospital 2 -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div style="font-weight: 800; font-size: 18px; color: #0f172a;">CMRI Hospital</div>
+          <div style="background: #ecfdf5; color: #059669; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800;"><i class="fa-solid fa-certificate"></i> NABH</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px;">
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #2563eb;">5</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Live Beds</div>
+          </div>
+          <div style="width: 1px; background: #e2e8f0;"></div>
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #059669;">1.8%</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Mortality</div>
+          </div>
+          <div style="width: 1px; background: #e2e8f0;"></div>
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #d97706;">5.1 <span style="font-size: 14px;">km</span></div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Distance</div>
+          </div>
+        </div>
+        <button style="width: 100%; background: #2563eb; color: #fff; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; border: none; cursor: pointer; box-shadow: var(--shadow-glow-blue);">
+          Book Admission <i class="fa-solid fa-arrow-right ml-2"></i>
+        </button>
+      </div>
+
+      <!-- Hospital 3 (Full) -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.03); opacity: 0.7;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div style="font-weight: 800; font-size: 18px; color: #0f172a;">Fortis Hospital</div>
+          <div style="background: #ecfdf5; color: #059669; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 800;"><i class="fa-solid fa-certificate"></i> NABH</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 24px; background: #f8fafc; padding: 16px; border-radius: 12px;">
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #dc2626;">0</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Live Beds</div>
+          </div>
+          <div style="width: 1px; background: #e2e8f0;"></div>
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #059669;">2.5%</div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Mortality</div>
+          </div>
+          <div style="width: 1px; background: #e2e8f0;"></div>
+          <div style="text-align: center;">
+            <div style="font-family: 'Outfit'; font-size: 28px; font-weight: 900; color: #d97706;">7.8 <span style="font-size: 14px;">km</span></div>
+            <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Distance</div>
+          </div>
+        </div>
+        <button style="width: 100%; background: #e2e8f0; color: #94a3b8; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; border: none; cursor: not-allowed;">
+          No Beds Available
+        </button>
+      </div>
+    </div>
+    
+    <div class="slide-number">04</div>
+  </div>
+
+  <!-- ════════════ SLIDE 6: 5 MIN AMBULANCE ════════════ -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 100% 0%, #7f1d1d 0%, #0b1120 60%);">
+    <div class="badge-pill" style="background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; margin-bottom: 24px;">
+      <i class="fa-solid fa-truck-fast"></i> OUR KILLER FEATURE
+    </div>
+    <h2 style="font-size: 56px; font-weight: 900; line-height: 1.1; margin-bottom: 24px; letter-spacing: -1px; text-shadow: 0 10px 30px rgba(220,38,38,0.3);">
+      5-Minute<br>Smart Ambulances
+    </h2>
+    <p style="color: #cbd5e1; font-size: 18px; max-width: 700px; margin-bottom: 50px; line-height: 1.6;">
+      The national average response time is 40+ minutes. Doctro's GPS-tracked fleet reaches patients in under 5 minutes. This is not an incremental improvement — it's a paradigm shift.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 30px;">
+      <!-- Without Doctro -->
+      <div class="glass-card" style="border-top: 4px solid #ef4444; background: rgba(0,0,0,0.3); padding: 24px;">
+        <div style="font-size: 13px; font-weight: 800; color: #fca5a5; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px;"><i class="fa-solid fa-xmark"></i> Without Doctro</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-box" style="background: rgba(239,68,68,0.2); color: #ef4444; width: 40px; height: 40px; font-size: 14px;"><i class="fa-solid fa-phone"></i></div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; color: #ffffff;">Call 108 Helpline</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 2px;">5-10 min hold time.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-box" style="background: rgba(239,68,68,0.2); color: #ef4444; width: 40px; height: 40px; font-size: 14px;"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; color: #ffffff;">Manual Dispatch</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 2px;">Operator manually searches.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-box" style="background: rgba(239,68,68,0.2); color: #ef4444; width: 40px; height: 40px; font-size: 14px;"><i class="fa-solid fa-hourglass"></i></div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; color: #ffffff;">No Tracking</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 2px;">Blind waiting in panic.</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+          <div style="font-family: 'Outfit'; font-size: 32px; font-weight: 900; color: #ef4444;">40+ MIN</div>
+        </div>
+      </div>
+
+      <!-- With Doctro -->
+      <div class="glass-card" style="border-top: 4px solid #10b981; background: rgba(16,185,129,0.05); box-shadow: var(--shadow-glow-emerald); padding: 24px;">
+        <div style="font-size: 13px; font-weight: 800; color: #34d399; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px;"><i class="fa-solid fa-check"></i> With Doctro</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-box" style="background: rgba(16,185,129,0.2); color: #10b981; width: 40px; height: 40px; font-size: 14px;"><i class="fa-solid fa-mobile-screen"></i></div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; color: #ffffff;">1-Tap Booking</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 2px;">Instant GPS capture.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-box" style="background: rgba(16,185,129,0.2); color: #10b981; width: 40px; height: 40px; font-size: 14px;"><i class="fa-solid fa-robot"></i></div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; color: #ffffff;">AI Auto-Dispatch</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 2px;">Driver notified in 10s.</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-box" style="background: rgba(16,185,129,0.2); color: #10b981; width: 40px; height: 40px; font-size: 14px;"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; color: #ffffff;">Live GPS Tracking</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 2px;">Uber-style tracking map.</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+          <div style="font-family: 'Outfit'; font-size: 32px; font-weight: 900; color: #10b981; text-shadow: 0 0 20px rgba(16,185,129,0.5);">5 MIN</div>
+        </div>
+      </div>
+
+      <!-- Pricing Model Chart -->
+      <div class="glass-card" style="border-top: 4px solid #3b82f6; background: rgba(59,130,246,0.05); box-shadow: var(--shadow-glow-blue); display: flex; flex-direction: column; justify-content: space-between; padding: 24px;">
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #93c5fd; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px;"><i class="fa-solid fa-chart-line"></i> Pricing Economics</div>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px;">
+              <span style="color: #94a3b8; font-size: 13px;">Base Fare (First 5 km)</span>
+              <span style="color: #ffffff; font-weight: 800; font-size: 16px;">₹500</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px;">
+              <span style="color: #94a3b8; font-size: 13px;">Per Km Rate (After 5 km)</span>
+              <span style="color: #ffffff; font-weight: 800; font-size: 16px;">₹50 <span style="font-size: 11px; color: #64748b; font-weight: 400;">/ km</span></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px;">
+              <span style="color: #94a3b8; font-size: 13px;">ALS / Oxygen Surcharge</span>
+              <span style="color: #ffffff; font-weight: 800; font-size: 16px;">+₹300</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Bar Chart for km vs cost -->
+        <div style="margin-top: 24px;">
+           <div style="font-size: 10px; color: #64748b; margin-bottom: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Cost vs. Distance Projection</div>
+           <div style="display: flex; align-items: flex-end; gap: 6px; height: 90px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; position: relative;">
+              <!-- 5km -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                 <div style="font-size: 11px; color: #94a3b8; margin-bottom: 4px;">₹500</div>
+                 <div style="width: 100%; height: 30px; background: linear-gradient(to top, rgba(59,130,246,0.2), rgba(59,130,246,0.8)); border-radius: 4px 4px 0 0;"></div>
+                 <div style="font-size: 10px; color: #fff; margin-top: 6px; font-weight: 700;">5km</div>
+              </div>
+              <!-- 10km -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                 <div style="font-size: 11px; color: #94a3b8; margin-bottom: 4px;">₹750</div>
+                 <div style="width: 100%; height: 45px; background: linear-gradient(to top, rgba(59,130,246,0.2), rgba(59,130,246,0.8)); border-radius: 4px 4px 0 0;"></div>
+                 <div style="font-size: 10px; color: #fff; margin-top: 6px; font-weight: 700;">10km</div>
+              </div>
+              <!-- 15km -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                 <div style="font-size: 11px; color: #94a3b8; margin-bottom: 4px;">₹1k</div>
+                 <div style="width: 100%; height: 60px; background: linear-gradient(to top, rgba(59,130,246,0.2), rgba(59,130,246,0.8)); border-radius: 4px 4px 0 0;"></div>
+                 <div style="font-size: 10px; color: #fff; margin-top: 6px; font-weight: 700;">15km</div>
+              </div>
+              <!-- 20km -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                 <div style="font-size: 11px; color: #94a3b8; margin-bottom: 4px;">₹1.2k</div>
+                 <div style="width: 100%; height: 80px; background: linear-gradient(to top, rgba(59,130,246,0.2), rgba(59,130,246,0.8)); border-radius: 4px 4px 0 0;"></div>
+                 <div style="font-size: 10px; color: #fff; margin-top: 6px; font-weight: 700;">20km</div>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slide-number" style="color: rgba(255,255,255,0.3);">05</div>
+  </div>
+
+  <!-- ════════════ SLIDE 7: DOCTRO AI ════════════ -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 0% 100%, #1e1b4b 0%, #0b1120 60%);">
+    <div class="badge-pill" style="background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.4); color: #a5b4fc; margin-bottom: 24px;">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> AI-POWERED HEALTHCARE
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      Doctro AI:<br><span style="background: linear-gradient(135deg, #818cf8, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Your 24/7 Health Assistant</span>
+    </h2>
+    <p style="color: #cbd5e1; font-size: 18px; max-width: 800px; margin-bottom: 50px; line-height: 1.6;">
+      An intelligent AI companion that guides patients through their entire healthcare journey — from symptom analysis to specialist recommendations — available through voice, chat, and soon video call.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+      <div class="glass-card" style="display: flex; gap: 20px;">
+        <div class="icon-box" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 10px 30px rgba(99,102,241,0.4);"><i class="fa-solid fa-microphone-lines"></i></div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; font-size: 18px;">Voice Assistant</div>
+            
+          </div>
+          <div style="font-size: 14px; color: #94a3b8; line-height: 1.6;">Speak symptoms in Hindi, Bengali, or English. Doctro AI triages and recommends the right specialist hands-free.</div>
+        </div>
+      </div>
+      
+      <div class="glass-card" style="display: flex; gap: 20px;">
+        <div class="icon-box" style="background: linear-gradient(135deg, #0ea5e9, #2563eb); box-shadow: 0 10px 30px rgba(14,165,233,0.4);"><i class="fa-solid fa-message"></i></div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; font-size: 18px;">Smart Chat</div>
+            
+          </div>
+          <div style="font-size: 14px; color: #94a3b8; line-height: 1.6;">Type "I have chest pain" — AI instantly suggests Cardiology, shows doctors, and can trigger an ambulance.</div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="display: flex; gap: 20px;">
+        <div class="icon-box" style="background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 10px 30px rgba(245,158,11,0.4);"><i class="fa-solid fa-video"></i></div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; font-size: 18px;">AI Video Consult</div>
+            
+          </div>
+          <div style="font-size: 14px; color: #94a3b8; line-height: 1.6;">AI-powered pre-screening video calls with visual symptom analysis before connecting to a human doctor.</div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="display: flex; gap: 20px;">
+        <div class="icon-box" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 10px 30px rgba(16,185,129,0.4);"><i class="fa-solid fa-bell"></i></div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 800; font-size: 18px;">Daily Health Alerts</div>
+            
+          </div>
+          <div style="font-size: 14px; color: #94a3b8; line-height: 1.6;">Personalized daily health tips, medication reminders, and follow-up alerts keeping patients engaged 365 days.</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slide-number" style="color: rgba(255,255,255,0.3);">06</div>
+  </div>
+
+  <!-- ════════════ SLIDE 8: BUSINESS MODEL ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #f0fdf4; color: #059669; margin-bottom: 24px;">
+      <i class="fa-solid fa-sack-dollar"></i> BUSINESS MODEL
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      Comprehensive Revenue.<br><span style="color: #059669;">12 Profit Streams.</span>
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 800px; line-height: 1.6;">
+      Every feature in the Doctro ecosystem is a standalone revenue generator with clear, highly scalable profit margins.
+    </p>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 32px;">
+      
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-user-doctor" style="color: #2563eb;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Doctor Consults</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">20-30% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Platform fee per video or physical clinic consult.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-truck-fast" style="color: #dc2626;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">5-Min Ambulance</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">25-30% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Revenue share per dispatch with fleet partners.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0d9488; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-bed-pulse" style="color: #0d9488;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Live Bed Booking</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">10-15% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Commission per successful hospital admission.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-microscope" style="color: #7c3aed;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Lab Tests & Diagnostics</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">30-40% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">B2B negotiated margins on pathology & imaging.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-shield-heart" style="color: #059669;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Health Check-ups</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">40-50% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">High-margin full-body preventive care packages.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #ea580c; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-robot" style="color: #ea580c;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">AI Health Assistant</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">80% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">B2B SaaS subscription (₹1,999/mo) for clinics.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-pills" style="color: #64748b;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Pharmacy Delivery</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">15-20% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Retail margin on doorstep medicine delivery.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-house-medical" style="color: #64748b;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Home Care</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">20-25% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Commission on nursing staff & attendant placements.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-file-medical" style="color: #64748b;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Insurance Desk</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">15-20% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Brokerage commission on health premium sales.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-person-walking" style="color: #64748b;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Rehab Centre</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">20-30% Margin</div>
+        <div style="font-size: 12px; color: #64748b;">Platform fee per physiotherapy / rehab session.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-building-user" style="color: #f59e0b;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">B2B Diagnostic Partners</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">40% Rev Share</div>
+        <div style="font-size: 12px; color: #64748b;">Managing marketing & patient flow for diagnostic centers.</div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 12px; padding: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-hand-holding-dollar" style="color: #64748b;"></i>
+          <div style="font-weight: 800; font-size: 14px; color: #0f172a;">Health Loan</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 900; color: #059669; margin-bottom: 4px; font-family: 'Outfit';">2-5% Flat Fee</div>
+        <div style="font-size: 12px; color: #64748b;">Processing fee + interest spread on medical financing.</div>
+      </div>
+
+    </div>
+    <div class="slide-number">07</div>
+  </div>
+
+  <!-- ════════════ SLIDE 9: FINANCIALS & ROADMAP ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #eff6ff; color: #2563eb; margin-bottom: 24px;">
+      <i class="fa-solid fa-map-location-dot"></i> SCALING ROADMAP
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      West Bengal Dominance to<br><span style="color: #2563eb;">PAN India Expansion.</span>
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 800px; margin-bottom: 40px; line-height: 1.6;">
+      Our 2-phase strategy to build the ultimate healthcare operating system. We prove the model locally, then scale nationally using our B2B Diagnostic Partner network.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+      
+      <!-- Phase 1 -->
+      <div class="premium-card" style="padding: 40px; border-top: 6px solid #2563eb;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div style="font-size: 14px; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 2px;">Phase 1: Proof & Density</div>
+          <div style="background: #eff6ff; color: #2563eb; padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 800;">Months 1-18</div>
+        </div>
+        <h3 style="font-size: 28px; font-weight: 900; color: #0f172a; margin-bottom: 12px;">West Bengal</h3>
+        <div style="font-size: 15px; color: #64748b; margin-bottom: 30px;">Saturation across all 23 districts (Kolkata, Howrah, Hooghly, Siliguri corridor).</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="background: #f8fafc; padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 700; color: #475569; font-size: 14px;">Capital Required (Seed)</div>
+            <div style="font-weight: 900; color: #0f172a; font-size: 18px;">₹5 Crore</div>
+          </div>
+          <div style="background: #ecfdf5; padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 700; color: #065f46; font-size: 14px;">Targeted ARR</div>
+            <div style="font-weight: 900; color: #059669; font-size: 18px;">₹25-30 Crore</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="premium-card" style="padding: 40px; border-top: 6px solid #059669; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div style="font-size: 14px; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 2px;">Phase 2: Hyper-Scale</div>
+          <div style="background: #ecfdf5; color: #059669; padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 800;">Year 3-5</div>
+        </div>
+        <h3 style="font-size: 28px; font-weight: 900; color: #0f172a; margin-bottom: 12px;">PAN India</h3>
+        <div style="font-size: 15px; color: #64748b; margin-bottom: 30px;">Nationwide rollout across 28 states & 700+ districts via B2B Diagnostic franchises.</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="background: #ffffff; padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
+            <div style="font-weight: 700; color: #475569; font-size: 14px;">Capital Required (Series A)</div>
+            <div style="font-weight: 900; color: #0f172a; font-size: 18px;">₹50+ Crore</div>
+          </div>
+          <div style="background: #ecfdf5; padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 700; color: #065f46; font-size: 14px;">Targeted ARR</div>
+            <div style="font-weight: 900; color: #059669; font-size: 24px;">₹250-300 Cr</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="slide-number">08</div>
+  </div>
+
+
+  <!-- ════════════ SLIDE 10: WEST BENGAL ROLLOUT ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #eff6ff; color: #2563eb; margin-bottom: 24px;">
+      <i class="fa-solid fa-map"></i> PHASE 1: WEST BENGAL
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      Capturing 90M+ Lives across<br><span style="color: #2563eb;">All 23 Districts.</span>
+    </h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px;">
+      <div class="premium-card" style="padding: 24px; border-top: 4px solid #ef4444;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #ef4444; margin-bottom: 16px;">Tier 1: Core Focus (Months 1-6)</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Kolkata</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">North 24 Parganas</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">South 24 Parganas</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Howrah</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Hooghly</span>
+        </div>
+      </div>
+      <div class="premium-card" style="padding: 24px; border-top: 4px solid #f59e0b;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #f59e0b; margin-bottom: 16px;">Tier 2: Expansion (Months 6-12)</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Paschim Bardhaman</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Purba Bardhaman</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Nadia</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Darjeeling</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Purba Medinipur</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Paschim Medinipur</span>
+        </div>
+      </div>
+      <div class="premium-card" style="padding: 24px; border-top: 4px solid #10b981;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #10b981; margin-bottom: 16px;">Tier 3: Saturation (Months 12-18)</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Bankura</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Birbhum</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Purulia</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Malda</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Murshidabad</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Jalpaiguri</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Alipurduar</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Cooch Behar</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Dinajpur (N/S)</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Kalimpong</span>
+          <span class="badge" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #334155;">Jhargram</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="premium-card" style="margin-top: 30px; padding: 24px; display: flex; align-items: center; gap: 20px; background: linear-gradient(135deg, #1e293b, #0f172a);">
+       <div class="icon-box" style="background: rgba(255,255,255,0.1); color: #38bdf8; width: 60px; height: 60px; font-size: 24px;"><i class="fa-solid fa-microscope"></i></div>
+       <div>
+         <div style="font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">The Growth Engine: B2B Diagnostic Partnerships</div>
+         <div style="font-size: 14px; color: #94a3b8;">Partnering with local diagnostic centers in every district. We manage digital acquisition & camps; they fulfill tests. <span style="color: #34d399; font-weight: 700;">Zero Capex. 40%-60% Revenue Share.</span></div>
+       </div>
+    </div>
+    <div class="slide-number">09</div>
+  </div>
+
+  <!-- ════════════ SLIDE 11: PAN INDIA ROLLOUT ════════════ -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 100% 100%, #064e3b 0%, #0b1120 70%);">
+    <div class="badge-pill" style="background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399; margin-bottom: 24px;">
+      <i class="fa-solid fa-globe"></i> PHASE 2: PAN INDIA
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px; text-shadow: 0 10px 30px rgba(16,185,129,0.2);">
+      National Expansion across<br><span style="color: #34d399;">28 States & 700+ Districts.</span>
+    </h2>
+    <p style="color: #94a3b8; font-size: 18px; max-width: 800px; margin-bottom: 40px; line-height: 1.6;">
+      Replicating the West Bengal playbook nationally. Scaled rapidly through our B2B Diagnostic Franchise model and AI-driven fleet routing.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+      <!-- South -->
+      <div class="glass-card" style="padding: 24px; border-top: 4px solid #3b82f6;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #93c5fd; margin-bottom: 12px;"><i class="fa-solid fa-location-dot"></i> South Zone</h3>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">High Digital Adoption</div>
+        <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 8px;">
+          <li><i class="fa-solid fa-check text-blue-400 mr-2"></i> Karnataka (31 Dist.)</li>
+          <li><i class="fa-solid fa-check text-blue-400 mr-2"></i> Tamil Nadu (38 Dist.)</li>
+          <li><i class="fa-solid fa-check text-blue-400 mr-2"></i> Telangana (33 Dist.)</li>
+          <li><i class="fa-solid fa-check text-blue-400 mr-2"></i> Andhra (26 Dist.)</li>
+          <li><i class="fa-solid fa-check text-blue-400 mr-2"></i> Kerala (14 Dist.)</li>
+        </ul>
+      </div>
+      <!-- West -->
+      <div class="glass-card" style="padding: 24px; border-top: 4px solid #f59e0b;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #fcd34d; margin-bottom: 12px;"><i class="fa-solid fa-location-dot"></i> West Zone</h3>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">High Spending Power</div>
+        <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 8px;">
+          <li><i class="fa-solid fa-check text-yellow-400 mr-2"></i> Maharashtra (36 Dist.)</li>
+          <li><i class="fa-solid fa-check text-yellow-400 mr-2"></i> Gujarat (33 Dist.)</li>
+          <li><i class="fa-solid fa-check text-yellow-400 mr-2"></i> Rajasthan (50 Dist.)</li>
+          <li><i class="fa-solid fa-check text-yellow-400 mr-2"></i> Goa (2 Dist.)</li>
+        </ul>
+      </div>
+      <!-- North -->
+      <div class="glass-card" style="padding: 24px; border-top: 4px solid #ec4899;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #f9a8d4; margin-bottom: 12px;"><i class="fa-solid fa-location-dot"></i> North Zone</h3>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">Massive Patient Volume</div>
+        <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 8px;">
+          <li><i class="fa-solid fa-check text-pink-400 mr-2"></i> Uttar Pradesh (75 Dist.)</li>
+          <li><i class="fa-solid fa-check text-pink-400 mr-2"></i> Delhi NCR (11 Dist.)</li>
+          <li><i class="fa-solid fa-check text-pink-400 mr-2"></i> Haryana (22 Dist.)</li>
+          <li><i class="fa-solid fa-check text-pink-400 mr-2"></i> Punjab (23 Dist.)</li>
+          <li><i class="fa-solid fa-check text-pink-400 mr-2"></i> Uttarakhand (13 Dist.)</li>
+        </ul>
+      </div>
+      <!-- East/Central -->
+      <div class="glass-card" style="padding: 24px; border-top: 4px solid #10b981;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #6ee7b7; margin-bottom: 12px;"><i class="fa-solid fa-location-dot"></i> East/Central</h3>
+        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 16px;">Untapped Markets</div>
+        <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #e2e8f0; display: flex; flex-direction: column; gap: 8px;">
+          <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Bihar (38 Dist.)</li>
+          <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Odisha (30 Dist.)</li>
+          <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> MP (52 Dist.)</li>
+          <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Jharkhand (24 Dist.)</li>
+          <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> NE States (Assam etc.)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number" style="color: rgba(255,255,255,0.3);">10</div>
+  </div>
+
+  
+  <!-- ════════════ SLIDE 12: STATE-WISE REVENUE BREAKDOWN ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #f0fdf4; color: #16a34a; margin-bottom: 24px;">
+      <i class="fa-solid fa-chart-pie"></i> REVENUE ANALYTICS
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      Projected State-Wise<br><span style="color: #16a34a;">Revenue Distribution (Year 5)</span>
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 800px; margin-bottom: 40px; line-height: 1.6;">
+      Detailed analytical projection of our ₹250-300 Cr PAN India ARR based on population density, digital adoption rates, and out-of-pocket healthcare expenditure per state.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <!-- Chart Left -->
+      <div class="premium-card" style="padding: 30px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 24px; text-transform: uppercase;">Top 8 Revenue Generating States</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- MH -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Maharashtra (High Spend)</span> <span style="color: #16a34a;">18%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 18%; background: #16a34a; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- UP -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Uttar Pradesh (High Volume)</span> <span style="color: #16a34a;">15%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 15%; background: #16a34a; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- KA -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Karnataka (Tech Adoption)</span> <span style="color: #16a34a;">12%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 12%; background: #22c55e; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- WB -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>West Bengal (Home Base)</span> <span style="color: #16a34a;">10%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 10%; background: #22c55e; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- TN -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Tamil Nadu</span> <span style="color: #16a34a;">9%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 9%; background: #4ade80; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- DL -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Delhi NCR</span> <span style="color: #16a34a;">8%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 8%; background: #4ade80; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- GJ -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Gujarat</span> <span style="color: #16a34a;">7%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 7%; background: #86efac; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+          <!-- TS -->
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;"><span>Telangana</span> <span style="color: #16a34a;">6%</span></div>
+            <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 10px;"><div style="width: 6%; background: #86efac; height: 100%; border-radius: 10px;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Right -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 24px; border-radius: 12px; border-left: 4px solid #16a34a;">
+          <h4 style="font-weight: 900; font-size: 16px; margin-bottom: 8px; color: #0f172a;">Regional Strategy</h4>
+          <p style="font-size: 13px; color: #64748b; line-height: 1.5;">The remaining 15% revenue is aggregated from Tier 2 & 3 states (Bihar, MP, Rajasthan, Odisha). We extract maximum LTV from high-spending metros while using high-volume North Indian states to achieve massive B2B Diagnostic Partner volume.</p>
+        </div>
+        
+        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 24px; border-radius: 12px; display: flex; align-items: center; gap: 20px;">
+          <div style="font-size: 40px; color: #16a34a; font-weight: 900; font-family: 'Outfit';">45%</div>
+          <div style="font-size: 14px; color: #475569; font-weight: 600;">of total revenue will stem strictly from <span style="color: #0f172a; font-weight: 800;">South & West India</span> due to higher willingness to pay for premium 5-minute ambulance dispatches and AI features.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">11</div>
+  </div>
+
+  <!-- ════════════ SLIDE 13: UNIT ECONOMICS ════════════ -->
+  <div class="slide slide-dark" style="background: #0f172a;">
+    <div class="badge-pill" style="background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4); color: #fcd34d; margin-bottom: 24px;">
+      <i class="fa-solid fa-coins"></i> UNIT ECONOMICS
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; color: #ffffff; letter-spacing: -1px;">
+      Highly Profitable<br><span style="color: #f59e0b;">Customer Acquisition.</span>
+    </h2>
+    <p style="color: #94a3b8; font-size: 18px; max-width: 800px; margin-bottom: 40px; line-height: 1.6;">
+      By organizing free health camps with B2B Diagnostic Partners, our B2C Customer Acquisition Cost (CAC) drops to near zero, while Lifetime Value (LTV) stacks infinitely across the 12-service ecosystem.
+    </p>
+
+    <div style="display: flex; gap: 30px; margin-bottom: 40px;">
+      <div class="glass-card" style="flex: 1; text-align: center; padding: 40px;">
+        <div style="font-size: 14px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px;">Blended CAC</div>
+        <div style="font-family: 'Outfit'; font-size: 56px; font-weight: 900; color: #ffffff; margin: 16px 0;">₹120</div>
+        <div style="font-size: 13px; color: #cbd5e1;">Per acquired patient (App install + first transaction). Brought down by viral camp referrals.</div>
+      </div>
+      <div class="glass-card" style="flex: 1; text-align: center; padding: 40px; background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); box-shadow: 0 10px 40px rgba(245,158,11,0.2);">
+        <div style="font-size: 14px; font-weight: 800; color: #fcd34d; text-transform: uppercase; letter-spacing: 2px;">Avg. Patient LTV</div>
+        <div style="font-family: 'Outfit'; font-size: 56px; font-weight: 900; color: #f59e0b; margin: 16px 0;">₹9,500+</div>
+        <div style="font-size: 13px; color: #cbd5e1;">Lifetime revenue across ambulance, pharmacy, tests, and consults (5-year horizon).</div>
+      </div>
+    </div>
+    <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+      <div style="font-size: 24px; color: #e2e8f0; font-weight: 800;">LTV:CAC Ratio = <span style="color: #10b981; font-size: 32px; font-family: 'Outfit';">79x</span></div>
+      <div style="font-size: 14px; color: #94a3b8; margin-top: 8px;">(The industry standard for a scalable tech business is 3x)</div>
+    </div>
+    <div class="slide-number">12</div>
+  </div>
+
+  <!-- ════════════ SLIDE 14: FUTURE ADVANTAGE & MOAT ════════════ -->
+  <div class="slide">
+    <div class="badge-pill" style="background: #fdf2f8; color: #db2777; margin-bottom: 24px;">
+      <i class="fa-solid fa-lock"></i> LONG-TERM MOAT
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
+      The 10-Year Ecosystem Advantage
+    </h2>
+    <p style="color: #64748b; font-size: 18px; max-width: 800px; margin-bottom: 50px; line-height: 1.6;">
+      Why Doctro becomes an impenetrable monopoly in the health-tech space as we scale. We don't just acquire users; we lock in the entire supply chain.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+      <div class="premium-card" style="padding: 30px; border-top: 4px solid #db2777;">
+        <div class="icon-box" style="background: #fdf2f8; color: #db2777; width: 48px; height: 48px; font-size: 20px; margin-bottom: 20px;"><i class="fa-solid fa-database"></i></div>
+        <h3 style="font-size: 18px; font-weight: 900; color: #0f172a; margin-bottom: 12px;">Proprietary Data Monopoly</h3>
+        <p style="font-size: 13px; color: #475569; line-height: 1.6;">By owning the 5-minute ambulance entry point, Doctro is the <strong>first</strong> to know when a medical event occurs. We capture the patient's entire clinical journey before any competitor even knows they are sick.</p>
+      </div>
+
+      <div class="premium-card" style="padding: 30px; border-top: 4px solid #7c3aed;">
+        <div class="icon-box" style="background: #f5f3ff; color: #7c3aed; width: 48px; height: 48px; font-size: 20px; margin-bottom: 20px;"><i class="fa-solid fa-link"></i></div>
+        <h3 style="font-size: 18px; font-weight: 900; color: #0f172a; margin-bottom: 12px;">High Switching Costs</h3>
+        <p style="font-size: 13px; color: #475569; line-height: 1.6;">Hospitals run their live-bed inventory on our dashboard. Diagnostic labs rely on our B2B marketing camps for 40% of their footfall. If they leave Doctro, they lose their core business.</p>
+      </div>
+
+      <div class="premium-card" style="padding: 30px; border-top: 4px solid #0ea5e9;">
+        <div class="icon-box" style="background: #f0f9ff; color: #0ea5e9; width: 48px; height: 48px; font-size: 20px; margin-bottom: 20px;"><i class="fa-solid fa-brain"></i></div>
+        <h3 style="font-size: 18px; font-weight: 900; color: #0f172a; margin-bottom: 12px;">AI First-Mover Advantage</h3>
+        <p style="font-size: 13px; color: #475569; line-height: 1.6;">Our AI Health Assistant and auto-dispatch algorithms get exponentially smarter with every ride and consultation. A new competitor cannot simply copy years of machine-learning patient data.</p>
+      </div>
+    </div>
+    <div class="slide-number">13</div>
+  </div>
+
+  <!-- ════════════ SLIDE 15: COMPETITIVE MATRIX ════════════ -->
+
+  <div class="slide">
+    <div class="badge-pill" style="background: #fef2f2; color: #dc2626; margin-bottom: 24px;">
+      <i class="fa-solid fa-chess-knight"></i> COMPETITIVE ADVANTAGE
+    </div>
+    <h2 style="font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 40px; letter-spacing: -1px;">
+      Why Doctro Wins Where<br><span style="color: #dc2626;">Others Cannot Compete</span>
+    </h2>
+
+    <div class="competitive-grid">
+      <!-- Headers -->
+      <div class="comp-cell comp-header" style="justify-content: flex-start; border-bottom: 2px solid #cbd5e1;">FEATURE CAPABILITY</div>
+      <div class="comp-cell comp-header" style="background: #2563eb; color: #fff; font-size: 16px; border-bottom: 2px solid #1e3a8a;">DOCTRO</div>
+      <div class="comp-cell comp-header" style="border-bottom: 2px solid #cbd5e1;">PRACTO</div>
+      <div class="comp-cell comp-header" style="border-bottom: 2px solid #cbd5e1;">1MG</div>
+      <div class="comp-cell comp-header" style="border-bottom: 2px solid #cbd5e1;">108 GOVT</div>
+      
+      <!-- Rows -->
+      <div class="comp-cell" style="justify-content: flex-start; font-weight: 700; color: #0f172a;">5-Min Ambulance Dispatch</div>
+      <div class="comp-cell comp-doctro"><i class="fa-solid fa-circle-check text-green-500 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell" style="color: #94a3b8; font-weight: 600;">40 min</div>
+
+      <div class="comp-cell" style="justify-content: flex-start; font-weight: 700; color: #0f172a;">Live Bed Booking</div>
+      <div class="comp-cell comp-doctro"><i class="fa-solid fa-circle-check text-green-500 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+
+      <div class="comp-cell" style="justify-content: flex-start; font-weight: 700; color: #0f172a;">Voice + Chat AI Assistant</div>
+      <div class="comp-cell comp-doctro"><i class="fa-solid fa-circle-check text-green-500 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+
+      <div class="comp-cell" style="justify-content: flex-start; font-weight: 700; color: #0f172a;">Physical Clinic Network</div>
+      <div class="comp-cell comp-doctro"><i class="fa-solid fa-circle-check text-green-500 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      
+      <div class="comp-cell" style="justify-content: flex-start; font-weight: 700; color: #0f172a; border-bottom: none;">Full-Stack Operating System</div>
+      <div class="comp-cell comp-doctro" style="border-bottom: none;"><i class="fa-solid fa-circle-check text-green-500 text-xl"></i></div>
+      <div class="comp-cell" style="border-bottom: none;"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell" style="border-bottom: none;"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+      <div class="comp-cell" style="border-bottom: none;"><i class="fa-solid fa-circle-xmark text-red-400 text-xl"></i></div>
+    </div>
+    
+    <div class="slide-number">14</div>
+  </div>
+
+  <!-- ════════════ SLIDE 16: USE OF FUNDS ════════════ -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 50% 100%, #1e3a8a 0%, #0b1120 60%); text-align: center; justify-content: center; align-items: center;">
+    <div class="badge-pill" style="background: rgba(52,211,153,0.2); border: 1px solid rgba(52,211,153,0.4); color: #6ee7b7; margin-bottom: 30px;">
+      <i class="fa-solid fa-rocket"></i> THE ASK
+    </div>
+    <h2 style="font-size: 64px; font-weight: 900; line-height: 1.1; margin-bottom: 24px; color: #ffffff; letter-spacing: -2px;">
+      Join Us in Building<br>India's Healthcare OS
+    </h2>
+    <p style="font-size: 22px; color: #94a3b8; margin-bottom: 60px; max-width: 800px; line-height: 1.6;">
+      We're raising <strong style="color: #fff;">₹5 Crore</strong> to save lives, scale to 5 cities, and build the most comprehensive health-tech platform the country has ever seen.
+    </p>
+
+    <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+      <div class="glass-card" style="padding: 40px; min-width: 250px;">
+        <div style="font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Raising</div>
+        <div style="font-family: 'Outfit'; font-size: 48px; font-weight: 900; color: #34d399; margin-top: 10px; text-shadow: var(--shadow-glow-emerald);">₹5 Cr</div>
+      </div>
+      <div class="glass-card" style="padding: 40px; min-width: 250px;">
+        <div style="font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Target ROI</div>
+        <div style="font-family: 'Outfit'; font-size: 48px; font-weight: 900; color: #60a5fa; margin-top: 10px; text-shadow: var(--shadow-glow-blue);">10x</div>
+      </div>
+      <div class="glass-card" style="padding: 40px; min-width: 250px;">
+        <div style="font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Allocation</div>
+        <div style="font-size: 16px; color: #ffffff; margin-top: 10px; font-weight: 600; text-align: left; line-height: 1.8;">
+          <i class="fa-solid fa-truck-medical text-blue-400 w-6"></i> 35% Fleet<br>
+          <i class="fa-solid fa-code text-purple-400 w-6"></i> 25% Tech & AI<br>
+          <i class="fa-solid fa-bullhorn text-orange-400 w-6"></i> 20% Marketing
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top: 60px; font-size: 24px; font-weight: 800; color: #e2e8f0; font-family: 'Outfit';">
+      Because every second counts.
+    </div>
+  </div>
+
+</body>
+</html>
